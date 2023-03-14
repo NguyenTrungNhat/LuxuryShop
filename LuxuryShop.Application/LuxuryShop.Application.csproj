@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LuxuryShop.Data\LuxuryShop.Data.csproj" />
+    <ProjectReference Include="..\LuxuryShop.Utilities\LuxuryShop.Utilities.csproj" />
+    <ProjectReference Include="..\LuxuryShop.ViewModels\LuxuryShop.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

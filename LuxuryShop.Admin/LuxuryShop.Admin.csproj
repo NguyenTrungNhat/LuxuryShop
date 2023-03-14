@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LuxuryShop.Application\LuxuryShop.Application.csproj" />
+    <ProjectReference Include="..\LuxuryShop.Data\LuxuryShop.Data.csproj" />
+    <ProjectReference Include="..\LuxuryShop.Utilities\LuxuryShop.Utilities.csproj" />
+    <ProjectReference Include="..\LuxuryShop.ViewModels\LuxuryShop.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
