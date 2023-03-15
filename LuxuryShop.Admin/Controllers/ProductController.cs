@@ -1,4 +1,5 @@
 ﻿using LuxuryShop.Application.Catalog.Products;
+using LuxuryShop.Data.Models;
 using LuxuryShop.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +11,8 @@ namespace LuxuryShop.Admin.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IManageProductService _manageProductService;
-
-        public ProductController(IManageProductService manageProductService)
+        
+        public ProductController(IManageProductService manageProductService, IPublicProductService publicProductService)
         {
             _manageProductService = manageProductService;
         }
@@ -70,5 +71,8 @@ namespace LuxuryShop.Admin.Controllers
                 return BadRequest();
             return Ok();
         }
+
+
+        
     }
 }

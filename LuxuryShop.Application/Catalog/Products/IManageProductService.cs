@@ -16,7 +16,7 @@ namespace LuxuryShop.Application.Catalog.Products
         int Delete(int productId);
         ProductViewModel GetById(int productId, string languageId);
         bool UpdatePrice(int productId, decimal newPrice);
-        bool UpdateStock(int productId, int addedQuantity);
+        bool UpdateStock(int productId, int addedQuantity); 
 
         //Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
         //Task<int> AddImage(int productId, List<IFormFile> files);
