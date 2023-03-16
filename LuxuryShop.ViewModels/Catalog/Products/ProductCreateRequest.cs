@@ -24,7 +24,7 @@ namespace LuxuryShop.ViewModels.Catalog.Products
         public int Price { get; set; }
 
         //formfile chứa thông tin các ảnh
-        public IFormFile ThumbnailImage { get; set; }
+        public IFormFile? ThumbnailImage { get; set; }
 
     }
 }
