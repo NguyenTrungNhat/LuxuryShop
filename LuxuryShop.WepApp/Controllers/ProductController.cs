@@ -1,5 +1,5 @@
 ﻿using LuxuryShop.Application.Catalog.Products;
-using LuxuryShop.Data.Models;
+using LuxuryShop.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

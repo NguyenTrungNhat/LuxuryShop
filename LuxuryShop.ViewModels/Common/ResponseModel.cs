@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LuxuryShop.Data.Models
+namespace LuxuryShop.ViewModels.Common
 {
     public class ResponseModel
     {

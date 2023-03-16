@@ -1,8 +1,12 @@
 ﻿using LuxuryShop.Application.Catalog.Products;
+using LuxuryShop.Application.Common;
 using LuxuryShop.Data.Models;
 using LuxuryShop.ViewModels.Catalog.Products;
+using LuxuryShop.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace LuxuryShop.Admin.Controllers
 {
@@ -11,10 +15,34 @@ namespace LuxuryShop.Admin.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IManageProductService _manageProductService;
+
         
-        public ProductController(IManageProductService manageProductService, IPublicProductService publicProductService)
+        public ProductController(IManageProductService manageProductService)
         {
             _manageProductService = manageProductService;
+        }
+
+        [Route("getAllPaging")]
+        [HttpPost]
+        public ResponseModel GetAllPaging([FromBody] Dictionary<string, object> formData)
+        {
+            var response = new ResponseModel();
+            try
+            {
+                var page = int.Parse(formData["page"].ToString());
+                var pageSize = int.Parse(formData["pageSize"].ToString());
+                long total = 0;
+                var data = _manageProductService.GetAllPaging(page, pageSize, out total);
+                response.TotalItems = total;
+                response.Data = data;
+                response.Page = page;
+                response.PageSize = pageSize;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return response;
         }
 
         [HttpGet("{productId}/{languageId}")]
@@ -72,7 +100,5 @@ namespace LuxuryShop.Admin.Controllers
             return Ok();
         }
 
-
-        
     }
 }

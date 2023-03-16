@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace LuxuryShop.ViewModels.Catalog.Products
         public int Price { get; set; }
 
         //formfile chứa thông tin các ảnh
-        //public IFormFile ThumbnailImage { get; set; }
+        public IFormFile ThumbnailImage { get; set; }
 
     }
 }

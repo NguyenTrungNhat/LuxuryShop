@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LuxuryShop.Data\LuxuryShop.Data.csproj" />
     <ProjectReference Include="..\LuxuryShop.Utilities\LuxuryShop.Utilities.csproj" />
     <ProjectReference Include="..\LuxuryShop.ViewModels\LuxuryShop.ViewModels.csproj" />
