@@ -3,6 +3,7 @@ using LuxuryShop.Data.Helper;
 using LuxuryShop.Data.Helper.Interfaces;
 using LuxuryShop.Data.Models;
 using LuxuryShop.Utilities.Exceptions;
+using LuxuryShop.ViewModels.Catalog.ProductImages;
 using LuxuryShop.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -233,6 +234,143 @@ namespace LuxuryShop.Application.Catalog.Products
                 file.CopyToAsync(fileStream);
             }
             return filePath;
+        }
+
+        public int AddImage(int productId, ProductImageCreateRequest request)
+        {
+            if (request.ImageFile != null)
+            {
+                string msgErrorImg = "";
+                try
+                {
+                    var resultImg = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgErrorImg, "sp_ListProductImage_AddImage",
+                        "@ProductID",productId,
+                        "@Caption",request.Caption,
+                        "@IsDefault",request.IsDefault,
+                        "@DateCreated",DateTime.Now,
+                        "@SortOrder",request.SortOrder,
+                        "@ImagePath", this.SaveFile(request.ImageFile, "Products"),
+                        "@FizeSize", request.ImageFile.Length);
+                    if ((resultImg != null && !string.IsNullOrEmpty(resultImg.ToString())) || !string.IsNullOrEmpty(msgErrorImg))
+                    {
+                        throw new LuxuryShopException(Convert.ToString(resultImg) + msgErrorImg);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            string msgErrorPr = "";
+            try
+            {
+                var query = "SELECT TOP(1) ListProductImageID AS Id FROM ListProductImage ORDER BY ListProductImageID DESC";
+                DataTable dt = _dbHelper.ExecuteQueryToDataTable(query, out msgErrorPr);
+                if (!string.IsNullOrEmpty(msgErrorPr))
+                {
+                    throw new LuxuryShopException(Convert.ToString(msgErrorPr));
+                }
+                List<int> listProductImageID = new List<int>();
+                foreach (DataRow row in dt.Rows)
+                {
+                    listProductImageID.Add((int)row[0]);
+                }
+
+
+                return listProductImageID[0];
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int RemoveImage(int imageId)
+        {
+            string msgError = "";
+            try
+            {
+                var image = this.GetImageById(imageId);
+                string filePath = $"{image.ImagePath}";
+                var fullPath = _tools.CreatePathFile(filePath);
+                File.Delete(fullPath);
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgError, "sp_listProductImage_delete",
+                "@imageId", imageId);
+                if ((result != null && !string.IsNullOrEmpty(result.ToString())) || !string.IsNullOrEmpty(msgError))
+                {
+                    throw new Exception(Convert.ToString(result) + msgError);
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int UpdateImage(int imageId, ProductImageUpdateReques request)
+        {
+            string msgError = "";
+            try
+            {
+                if(request.ImageFile != null)
+                {
+                    var image = this.GetImageById(imageId);
+                    string filePath = $"{image.ImagePath}";
+                    var fullPath = _tools.CreatePathFile(filePath);
+                    File.Delete(fullPath);
+                };
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgError, "sp_listproductImage_update",
+                "@ListProductImageID", imageId,
+                "@ImagePath", this.SaveFile(request.ImageFile, "Products"),
+                "@Caption", request.Caption,
+                "@IsDefault", request.IsDefault,
+                "@SortOrder", request.SortOrder,
+                "@FileSize", request.ImageFile.Length);
+                if ((result != null && !string.IsNullOrEmpty(result.ToString())) || !string.IsNullOrEmpty(msgError))
+                {
+                    throw new Exception(Convert.ToString(result) + msgError);
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public ProductImageViewModel GetImageById(int imageId)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_listProductImage_get_by_id",
+                     "@imageId", imageId);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<ProductImageViewModel>().FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<ProductImageViewModel> GetListImages(int productId)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_listProductImage_getAll",
+                     "@ProductId", productId);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<ProductImageViewModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using LuxuryShop.ViewModels.Catalog.ProductImages;
 
 namespace LuxuryShop.Admin.Controllers
 {
@@ -98,6 +99,69 @@ namespace LuxuryShop.Admin.Controllers
             if (!affectedResult)
                 return BadRequest();
             return Ok();
+        }
+
+        //Image
+        [HttpPost("{productId}/images")]
+        public IActionResult CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var imageId = _manageProductService.AddImage(productId, request);
+            if (imageId == 0)
+                return BadRequest();
+
+            var image = _manageProductService.GetImageById(imageId);
+            return Created(nameof(GetImageById), image);
+        }
+
+        [HttpPut("/images/{imageId}")]
+        public IActionResult UpdateImage(int imageId, [FromForm] ProductImageUpdateReques request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _manageProductService.UpdateImage(imageId, request);
+            if (result == 0)
+                return BadRequest();
+            return Ok();
+
+
+        }
+
+        [HttpDelete("/images/{imageId}")]
+        public IActionResult RemoveImage(int imageId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _manageProductService.RemoveImage(imageId);
+            if (result == 0)
+                return BadRequest();
+            return Ok();
+
+
+        }
+
+        [HttpGet("/image/{imageId}")]
+        public ProductImageViewModel GetImageById(int imageId)
+        {
+            return _manageProductService.GetImageById(imageId);
+        }
+
+        [HttpGet("{productId}/image/GetListImage")]
+        public IActionResult GetListImage(int productId)
+        {
+            var image =  _manageProductService.GetListImages(productId);
+            if (image == null)
+            {
+                return BadRequest("Cannot find product");
+            }
+            return Ok(image);
         }
 
     }
