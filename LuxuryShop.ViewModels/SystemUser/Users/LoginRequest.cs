@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LuxuryShop.ViewModels.System.Users
+namespace LuxuryShop.ViewModels.SystemUser.Users
 {
     public class LoginRequest
     {

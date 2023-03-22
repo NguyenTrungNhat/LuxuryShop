@@ -1,28 +1,32 @@
 ﻿using LuxuryShop.Data.Helper;
 using LuxuryShop.Data.Helper.Interfaces;
 using LuxuryShop.Data.Models;
+using LuxuryShop.Utilities.Exceptions;
 using LuxuryShop.ViewModels.Catalog.Products;
-using LuxuryShop.ViewModels.System.Users;
+using LuxuryShop.ViewModels.SystemUser.Users;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace LuxuryShop.Application.System.Users
+namespace LuxuryShop.Application.SystemUser.Users
 {
     public class UserService : IUserService
     {
         private readonly IDatabaseHelper _dbHelper;
-        private readonly IConfiguration _config;
-        public UserService(IDatabaseHelper dbHelper, IConfiguration config) 
+        private readonly AppSettings _appSettings;
+        public UserService(IDatabaseHelper dbHelper, IOptions<AppSettings> appSettings)
         {
             _dbHelper = dbHelper;
-            _config = config;
+            _appSettings = appSettings.Value;
         }
 
         public string Authenticate(LoginRequest request)
@@ -36,12 +40,12 @@ namespace LuxuryShop.Application.System.Users
                      "@Password", request.Password);
                 if (!string.IsNullOrEmpty(msgError))
                     throw new Exception(msgError);
-                var user =  dt.ConvertTo<UserViewModel>().FirstOrDefault();
+                var user = dt.ConvertTo<UserViewModel>().FirstOrDefault();
                 if (user == null)
                     return null;
 
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_config["AppSettings:Secret"]);
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
@@ -55,7 +59,7 @@ namespace LuxuryShop.Application.System.Users
                 };
                 var tmp = tokenHandler.CreateToken(tokenDescriptor);
                 return tokenHandler.WriteToken(tmp);
-                
+
             }
             catch (Exception ex)
             {
@@ -65,7 +69,42 @@ namespace LuxuryShop.Application.System.Users
 
         public bool Register(RegisterRequest request)
         {
-            throw new NotImplementedException();
+            if (!IsValidPassword(request.Password))
+            {
+                return false;
+            }
+            string msgError = "";
+            try
+            {
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgError, "sp_Accounts_Users_create",
+                "@Birthday", request.BirthDay,
+                "@Gender", request.Gender,
+                "@Thumb", request.Thumb,
+                "@Address", request.Address,
+                "@Email", request.Email,
+                "@Phone", request.Phone,
+                "@FullName", request.FullName,
+                "@UserName", request.UserName,
+                "@Password", request.Password,
+                "@RoleID", request.RoleID);
+                if ((result != null && !string.IsNullOrEmpty(result.ToString())) || !string.IsNullOrEmpty(msgError))
+                {
+                    throw new LuxuryShopException(Convert.ToString(result) + msgError);
+                }
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static bool IsValidPassword(string plainText)
+        {
+            Regex regex = new Regex(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+            Match match = regex.Match(plainText);
+            return match.Success;
         }
     }
 }

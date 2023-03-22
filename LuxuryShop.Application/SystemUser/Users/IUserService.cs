@@ -1,13 +1,13 @@
-﻿using LuxuryShop.ViewModels.System.Users;
+﻿using LuxuryShop.ViewModels.SystemUser.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LuxuryShop.Application.System.Users
+namespace LuxuryShop.Application.SystemUser.Users
 {
-    public  interface IUserService
+    public interface IUserService
     {
         string Authenticate(LoginRequest request);
         bool Register(RegisterRequest request);

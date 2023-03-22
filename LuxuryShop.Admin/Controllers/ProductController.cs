@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using LuxuryShop.ViewModels.Catalog.ProductImages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LuxuryShop.Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IManageProductService _manageProductService;
