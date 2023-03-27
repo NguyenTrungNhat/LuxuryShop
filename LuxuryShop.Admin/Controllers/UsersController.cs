@@ -1,4 +1,5 @@
 ﻿using LuxuryShop.Application.SystemUser.Users;
+using LuxuryShop.ViewModels.Common;
 using LuxuryShop.ViewModels.SystemUser.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LuxuryShop.Admin.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -19,7 +21,7 @@ namespace LuxuryShop.Admin.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public IActionResult Authenticate([FromForm] LoginRequest request)
+        public IActionResult Authenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -30,7 +32,7 @@ namespace LuxuryShop.Admin.Controllers
             {
                 return BadRequest("Username or Password is in correct.");
             }
-            return Ok(new { token = resultToken });
+            return Ok(resultToken);
         }
 
         [HttpPost("register")]
@@ -47,6 +49,29 @@ namespace LuxuryShop.Admin.Controllers
                 return BadRequest("Register is  unsuccessful.");
             }
             return Ok();
+        }
+
+
+        //https://localhost/api/users/getUsersPaging?page=1&pageSize=1
+        [Route("getUsersPaging")]
+        [HttpPost]
+        public ResponseModel GetAllPaging([FromBody] ResponseRequestBase request)
+        {
+            var response = new ResponseModel();
+            try
+            {
+                long total = 0;
+                var data = _userService.GetUsersPaging(request.page, request.pageSize, out total);
+                response.TotalItems = total;
+                response.Data = data;
+                response.Page = request.page;
+                response.PageSize = request.pageSize;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return response;
         }
 
     }

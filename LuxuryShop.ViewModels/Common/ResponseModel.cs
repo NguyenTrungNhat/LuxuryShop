@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LuxuryShop.ViewModels.Common
 {
-    public class ResponseModel
+    public class ResponseModel 
     {
         public long TotalItems { get; set; }
         public int Page { get; set; }

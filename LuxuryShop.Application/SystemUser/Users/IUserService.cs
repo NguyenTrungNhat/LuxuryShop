@@ -11,5 +11,7 @@ namespace LuxuryShop.Application.SystemUser.Users
     {
         string Authenticate(LoginRequest request);
         bool Register(RegisterRequest request);
+
+        List<UserViewModel> GetUsersPaging(int pageIndex, int pageSize, out long total);
     }
 }

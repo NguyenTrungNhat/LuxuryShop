@@ -106,5 +106,25 @@ namespace LuxuryShop.Application.SystemUser.Users
             Match match = regex.Match(plainText);
             return match.Success;
         }
+
+        public List<UserViewModel> GetUsersPaging(int pageIndex, int pageSize, out long total)
+        {
+            string msgError = "";
+            total = 0;
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_user_getUsertoPaging",
+                    "@page_index", pageIndex,
+                    "@page_size", pageSize);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                if (dt.Rows.Count > 0) total = (long)dt.Rows[0]["RecordCount"];
+                return dt.ConvertTo<UserViewModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -17,6 +17,16 @@ builder.Services.AddTransient<IUserService,UserService>();
 builder.Services.AddTransient<ITools,Tools>();
 
 
+builder.Services.AddCors(setup =>
+{
+    setup.AddDefaultPolicy(policyBuilder =>
+    {
+        policyBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+
+});
+
+
 // configure strongly typed settings objects
 var appSettingsSection = builder.Configuration.GetSection("AppSettings");
 builder.Services.Configure<AppSettings>(appSettingsSection);
@@ -61,9 +71,15 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+
+app.UseCors();
+
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+app.UseRouting();
