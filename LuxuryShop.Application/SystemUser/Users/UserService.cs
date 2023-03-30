@@ -126,5 +126,67 @@ namespace LuxuryShop.Application.SystemUser.Users
                 throw ex;
             }
         }
+
+        public int Update(UpdateUserRequest request)
+        {
+            string msgError = "";
+            try
+            {
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgError, "sp_user_update",
+                "@UserID", request.UserID,
+                "@FullName", request.FullName,
+                "@BirthDay", request.BirthDay,
+                "@Gender", request.Gender,
+                "@Thumb", request.Thumb,
+                "@Address", request.Address,
+                "@Email", request.Email,
+                "@Phone", request.Phone);
+                if ((result != null && !string.IsNullOrEmpty(result.ToString())) || !string.IsNullOrEmpty(msgError))
+                {
+                    throw new Exception(Convert.ToString(result) + msgError);
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public GetUserIdRequest GetById(int UserID)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_User_get_by_id",
+                     "@UserID", UserID);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<GetUserIdRequest>().FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int Delete(int UserID)
+        {
+            string msgError = "";
+            try
+            {
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgError, "sp_user_delete",
+                "@UserID", UserID);
+                if ((result != null && !string.IsNullOrEmpty(result.ToString())) || !string.IsNullOrEmpty(msgError))
+                {
+                    throw new Exception(Convert.ToString(result) + msgError);
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

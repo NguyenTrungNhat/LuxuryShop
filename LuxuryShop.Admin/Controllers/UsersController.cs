@@ -1,4 +1,6 @@
-﻿using LuxuryShop.Application.SystemUser.Users;
+﻿using LuxuryShop.Application.Catalog.Products;
+using LuxuryShop.Application.SystemUser.Users;
+using LuxuryShop.ViewModels.Catalog.Products;
 using LuxuryShop.ViewModels.Common;
 using LuxuryShop.ViewModels.SystemUser.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +15,12 @@ namespace LuxuryShop.Admin.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IManageProductService _manageProductService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IManageProductService manageProductService)
         {
             _userService = userService;
+            _manageProductService = manageProductService;
         }
 
         [HttpPost("authenticate")]
@@ -37,7 +41,7 @@ namespace LuxuryShop.Admin.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public IActionResult Register([FromForm] RegisterRequest request)
+        public IActionResult Register([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -73,6 +77,44 @@ namespace LuxuryShop.Admin.Controllers
             }
             return response;
         }
+
+        [Route("upload")]
+        [HttpPost]
+        public async Task<string> Upload(IFormFile file)
+        {
+            var filePath = _manageProductService.SaveFile(file, "Users");
+            return filePath;
+        }
+
+
+        [Route("update-user")]
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Update([FromBody] UpdateUserRequest request)
+        {
+            var affectedResult = _userService.Update(request);
+            if (affectedResult == 0)
+                return BadRequest();
+            return Ok();
+        }
+
+        [HttpDelete("delete-user/{UserID}")]
+        public IActionResult Delete(int UserID)
+        {
+            var affectedResult = _userService.Delete(UserID);
+            if (affectedResult == 0)
+                return BadRequest();
+            return Ok();
+        }
+
+        [HttpGet("get-by-id/{UserID}")]
+        [AllowAnonymous]
+        public GetUserIdRequest GetById(int UserID)
+        {
+            return _userService.GetById(UserID);
+        }
+
+
 
     }
 }

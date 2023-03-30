@@ -527,7 +527,7 @@ namespace LuxuryShop.Data.Models
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+                entity.Property(e => e.RoleID).HasColumnName("RoleID");
 
                 entity.Property(e => e.Description).HasMaxLength(50);
 

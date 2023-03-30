@@ -10,7 +10,7 @@ namespace LuxuryShop.Data.Models
             Accounts = new HashSet<Account>();
         }
 
-        public int RoleId { get; set; }
+        public int RoleID { get; set; }
         public string? RoleName { get; set; }
         public string? Description { get; set; }
 

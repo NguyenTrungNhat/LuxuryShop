@@ -1,4 +1,5 @@
 using LuxuryShop.Application.Catalog.Products;
+using LuxuryShop.Application.Catalog.Roles;
 using LuxuryShop.Application.Common;
 using LuxuryShop.Application.SystemUser.Users;
 using LuxuryShop.Data.Helper;
@@ -15,6 +16,7 @@ builder.Services.AddTransient<IDatabaseHelper, DatabaseHelper>();
 builder.Services.AddTransient<IManageProductService,ManageProductService>();
 builder.Services.AddTransient<IUserService,UserService>();
 builder.Services.AddTransient<ITools,Tools>();
+builder.Services.AddTransient<IManageRoleService,ManageRoleService>();
 
 
 builder.Services.AddCors(setup =>
