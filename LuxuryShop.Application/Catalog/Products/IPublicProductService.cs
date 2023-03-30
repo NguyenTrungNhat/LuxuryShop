@@ -10,5 +10,10 @@ namespace LuxuryShop.Application.Catalog.Products
     public interface IPublicProductService
     {
         List<ProductViewModel> GetProductByLanguage(int pageIndex, int pageSize, out long total, string languageId);
+
+        List<GetProductViewModel> GetProductBestSeller(GetProduct request);
+
+        List<GetProductViewModel> GetProductBestBuy(GetProduct request);
+        List<GetProductViewModel> GetProductNew(GetProduct request);
     }
 }

@@ -17,6 +17,43 @@ namespace LuxuryShop.Application.Catalog.Products
         {
             _dbHelper = dbHelper;
         }
+
+        public List<GetProductViewModel> GetProductBestBuy(GetProduct request)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_Product_GetProductBestBuy",
+                    "@Quantity", request.Quantity,
+                    "@LanguageId", request.LanguageId);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<GetProductViewModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<GetProductViewModel> GetProductBestSeller(GetProduct request)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_Product_GetProductBestSeller",
+                    "@Quantity", request.Quantity,
+                    "@LanguageId", request.LanguageId);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<GetProductViewModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<ProductViewModel> GetProductByLanguage(int pageIndex, int pageSize, out long total, string languageId)
         {
             string msgError = "";
@@ -31,6 +68,24 @@ namespace LuxuryShop.Application.Catalog.Products
                     throw new Exception(msgError);
                 if (dt.Rows.Count > 0) total = (long)dt.Rows[0]["RecordCount"];
                 return dt.ConvertTo<ProductViewModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<GetProductViewModel> GetProductNew(GetProduct request)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_Product_GetProductNew",
+                    "@Quantity", request.Quantity,
+                    "@LanguageId", request.LanguageId);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<GetProductViewModel>().ToList();
             }
             catch (Exception ex)
             {

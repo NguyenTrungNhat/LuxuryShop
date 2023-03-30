@@ -1,4 +1,5 @@
 ﻿using LuxuryShop.Application.Catalog.Products;
+using LuxuryShop.ViewModels.Catalog.Products;
 using LuxuryShop.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +40,27 @@ namespace LuxuryShop.WepApp.Controllers
                 throw new Exception(ex.Message);
             }
             return response;
+        }
+
+        [Route("getProductBestBuy")]
+        [HttpPost]
+        public List<GetProductViewModel> GetProductBestBuy([FromBody] GetProduct request)
+        {
+            return _publicProductService.GetProductBestBuy(request);
+        }
+
+        [Route("getProductNew")]
+        [HttpPost]
+        public List<GetProductViewModel> GetProductNew([FromBody] GetProduct request)
+        {
+            return _publicProductService.GetProductNew(request);
+        }
+
+        [Route("getProductBestSeller")]
+        [HttpPost]
+        public List<GetProductViewModel> GetProductBestSeller([FromBody] GetProduct request)
+        {
+            return _publicProductService.GetProductBestSeller(request);
         }
     }
 }
