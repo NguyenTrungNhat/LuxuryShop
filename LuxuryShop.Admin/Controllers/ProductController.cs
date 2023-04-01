@@ -54,7 +54,8 @@ namespace LuxuryShop.Admin.Controllers
             return _manageProductService.GetById(productId, languageId);
         }
 
-        [HttpPost]
+        [Route("CreateProduct")]
+        [HttpPost()]
         public IActionResult Create([FromForm] ProductCreateRequest request)
         {
             var productId = _manageProductService.Create(request);
@@ -104,6 +105,13 @@ namespace LuxuryShop.Admin.Controllers
         }
 
         //Image
+        [Route("upload")]
+        [HttpPost]
+        public async Task<string> Upload(IFormFile file)
+        {
+            var filePath = _manageProductService.SaveFile(file, "Products");
+            return filePath;
+        }
         [HttpPost("{productId}/images")]
         public IActionResult CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
         {
