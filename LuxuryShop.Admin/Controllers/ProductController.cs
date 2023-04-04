@@ -14,7 +14,6 @@ namespace LuxuryShop.Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IManageProductService _manageProductService;
@@ -70,6 +69,15 @@ namespace LuxuryShop.Admin.Controllers
         [HttpDelete("{productId}")]
         public IActionResult Delete(int productId)
         {
+            var listImgProduct = _manageProductService.GetListImages(productId);
+            for (int i = 0; i < listImgProduct.Count; i++)
+            {
+                var result = _manageProductService.RemoveImage(listImgProduct[i].ListProductImageID);
+                if(result == 0)
+                {
+                    return BadRequest();
+                }
+            }
             var affectedResult = _manageProductService.Delete(productId);
             if (affectedResult == 0)
                 return BadRequest();
