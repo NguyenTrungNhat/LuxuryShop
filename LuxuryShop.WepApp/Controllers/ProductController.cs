@@ -19,21 +19,18 @@ namespace LuxuryShop.WepApp.Controllers
 
         [Route("getProductByLanguage")]
         [HttpPost]
-        public ResponseModel GetProductByLanguage([FromBody] Dictionary<string, object> formData)
+        public ResponseModel GetProductByLanguage([FromBody] ResponRequestProductLanguage request)
         {
             var response = new ResponseModel();
             try
             {
-                var page = int.Parse(formData["page"].ToString());
-                var pageSize = int.Parse(formData["pageSize"].ToString());
-                string languageId = "";
-                if (formData.Keys.Contains("languageId") && !string.IsNullOrEmpty(Convert.ToString(formData["languageId"]))) { languageId = Convert.ToString(formData["languageId"]); }
+             
                 long total = 0;
-                var data = _publicProductService.GetProductByLanguage(page, pageSize, out total, languageId);
+                var data = _publicProductService.GetProductByLanguage(request.page, request.pageSize, out total, request.languageId);
                 response.TotalItems = total;
                 response.Data = data;
-                response.Page = page;
-                response.PageSize = pageSize;
+                response.Page = request.page;
+                response.PageSize = request.pageSize;
             }
             catch (Exception ex)
             {

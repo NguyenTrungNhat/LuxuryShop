@@ -26,5 +26,7 @@ namespace LuxuryShop.ViewModels.Catalog.Products
         public string LanguageId { get; set; }
 
         public string SeoAlias { get; set; }
+        public string? ImagePath { get; set; }
+        public double? Price { get; set; }
     }
 }

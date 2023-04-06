@@ -11,6 +11,7 @@ namespace LuxuryShop.ViewModels.Catalog.Products
         public int ProductID { get; set; }
         public string Name { get; set; }
         public string ImagePath { get; set; }
+        public decimal Price { get; set; }
         public int SL { get; set; }
     }
 }
