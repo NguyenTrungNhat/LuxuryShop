@@ -39,6 +39,28 @@ namespace LuxuryShop.WepApp.Controllers
             return response;
         }
 
+        [Route("getProductByCate")]
+        [HttpPost]
+        public ResponseModel GetProductByCate([FromBody] ResponRequestByCate request)
+        {
+            var response = new ResponseModel();
+            try
+            {
+
+                long total = 0;
+                var data = _publicProductService.GetProductWithCate(request.page, request.pageSize, out total,request.CatID, request.languageId);
+                response.TotalItems = total;
+                response.Data = data;
+                response.Page = request.page;
+                response.PageSize = request.pageSize;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return response;
+        }
+
         [Route("getProductBestBuy")]
         [HttpPost]
         public List<GetProductViewModel> GetProductBestBuy([FromBody] GetProduct request)
@@ -58,6 +80,12 @@ namespace LuxuryShop.WepApp.Controllers
         public List<GetProductViewModel> GetProductBestSeller([FromBody] GetProduct request)
         {
             return _publicProductService.GetProductBestSeller(request);
+        }
+
+        [HttpGet("GetProductDetail/{productId}/{languageId}")]
+        public ProductViewModel GetById(int productId, string languageId)
+        {
+            return _publicProductService.GetById(productId, languageId);
         }
     }
 }

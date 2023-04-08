@@ -92,5 +92,45 @@ namespace LuxuryShop.Application.Catalog.Products
                 throw ex;
             }
         }
+
+        public ProductViewModel GetById(int productId, string languageId)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_product_get_by_id",
+                     "@productId", productId,
+                     "@languageId", languageId);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<ProductViewModel>().FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<ProductViewModel> GetProductWithCate(int pageIndex, int pageSize, out long total,int CatID, string languageId)
+        {
+            string msgError = "";
+            total = 0;
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_product_getByCate",
+                    "@page_index", pageIndex,
+                    "@page_size", pageSize,
+                    "@CatID",CatID,
+                    "@languageId", languageId);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                if (dt.Rows.Count > 0) total = (long)dt.Rows[0]["RecordCount"];
+                return dt.ConvertTo<ProductViewModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
