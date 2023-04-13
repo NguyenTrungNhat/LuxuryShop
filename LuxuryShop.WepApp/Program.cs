@@ -2,7 +2,11 @@ using LuxuryShop.Application.Catalog.Products;
 using LuxuryShop.Data.Helper.Interfaces;
 using LuxuryShop.Data.Helper;
 using LuxuryShop.Application.Catalog.Categories;
-
+using LuxuryShop.Application.SystemUser.Users;
+using LuxuryShop.Application.Common;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<IDatabaseHelper, DatabaseHelper>();
 builder.Services.AddTransient<IPublicProductService, PublicProductService>();
 builder.Services.AddTransient<IPublicCategoriesService, PublicCategoriesService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ITools, Tools>();
+
 
 builder.Services.AddCors(setup =>
 {
@@ -19,6 +26,30 @@ builder.Services.AddCors(setup =>
         policyBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 
+});
+
+// configure strongly typed settings objects
+var appSettingsSection = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppSettings>(appSettingsSection);
+// configure jwt authentication
+var appSettings = appSettingsSection.Get<AppSettings>();
+var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
 });
 
 
@@ -43,11 +74,14 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
 app.UseRouting();
 
 
