@@ -9,7 +9,7 @@ namespace LuxuryShop.Data.Models
         public int? OrderId { get; set; }
         public int? ProductId { get; set; }
         public int? OrderNumber { get; set; }
-        public int? Amount { get; set; }
+        public int? quantity { get; set; }
         public int? Discount { get; set; }
         public int? TotalMoney { get; set; }
         public DateTime? CreateDate { get; set; }

@@ -7,6 +7,7 @@ using LuxuryShop.Application.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LuxuryShop.Application.Catalog.Cart;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddTransient<IDatabaseHelper, DatabaseHelper>();
 builder.Services.AddTransient<IPublicProductService, PublicProductService>();
 builder.Services.AddTransient<IPublicCategoriesService, PublicCategoriesService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IPublicCartService, PublicCartService>();
 builder.Services.AddTransient<ITools, Tools>();
 
 
