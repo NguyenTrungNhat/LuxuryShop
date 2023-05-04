@@ -1,3 +1,4 @@
+using LuxuryShop.Application.Catalog.Cart;
 using LuxuryShop.Application.Catalog.Products;
 using LuxuryShop.Application.Catalog.Roles;
 using LuxuryShop.Application.Common;
@@ -17,6 +18,7 @@ builder.Services.AddTransient<IManageProductService,ManageProductService>();
 builder.Services.AddTransient<IUserService,UserService>();
 builder.Services.AddTransient<ITools,Tools>();
 builder.Services.AddTransient<IManageRoleService,ManageRoleService>();
+builder.Services.AddTransient<IManageCartService,ManageCartService>();
 
 
 builder.Services.AddCors(setup =>

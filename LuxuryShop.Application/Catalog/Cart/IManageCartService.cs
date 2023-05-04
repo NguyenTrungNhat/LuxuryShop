@@ -1,5 +1,5 @@
 ﻿using LuxuryShop.ViewModels.Catalog.Cart;
-using LuxuryShop.ViewModels.Catalog.Products;
+using LuxuryShop.ViewModels.Catalog.ProductImages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace LuxuryShop.Application.Catalog.Cart
 {
-    public interface IPublicCartService
+    public interface IManageCartService
     {
-        int CreateOrder(CreateDonHangViewModel request);
+        List<ListOrderViewModel> GetListCartByEmail(string email);
         List<ListCustomerOrderViewModel> GetListCartAll();
-
-        int UpdateStatusUser(int OrderID);
-
+        int UpdateStatus(int OrderID);
     }
 }

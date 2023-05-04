@@ -23,6 +23,5 @@ namespace LuxuryShop.Application.Catalog.Products
         int UpdateImage(int imageId, ProductImageUpdateReques request);
         ProductImageViewModel GetImageById(int imageId);
         List<ProductImageViewModel> GetListImages(int productId);
-
     }
 }

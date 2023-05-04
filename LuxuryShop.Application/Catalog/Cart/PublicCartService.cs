@@ -1,4 +1,5 @@
 ﻿using LuxuryShop.Application.Common;
+using LuxuryShop.Data.Helper;
 using LuxuryShop.Data.Helper.Interfaces;
 using LuxuryShop.Utilities.Exceptions;
 using LuxuryShop.ViewModels.Catalog.Cart;
@@ -34,6 +35,41 @@ namespace LuxuryShop.Application.Catalog.Cart
                 }
                 return 1;
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int UpdateStatusUser(int OrderID)
+        {
+            string msgError = "";
+            try
+            {
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgError, "sp_order_update_status_user",
+                "@OrderID", OrderID);
+                if ((result != null && !string.IsNullOrEmpty(result.ToString())) || !string.IsNullOrEmpty(msgError))
+                {
+                    throw new Exception(Convert.ToString(result) + msgError);
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<ListCustomerOrderViewModel> GetListCartAll()
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_Carts_getAll");
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<ListCustomerOrderViewModel>().ToList();
             }
             catch (Exception ex)
             {

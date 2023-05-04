@@ -71,9 +71,6 @@ namespace LuxuryShop.Application.Catalog.Products
                         throw ex;
                     }
                 }
-
-
-
                 string msgErrorPr = "";
                 try
                 {
