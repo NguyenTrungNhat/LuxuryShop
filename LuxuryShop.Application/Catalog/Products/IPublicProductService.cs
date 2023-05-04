@@ -11,13 +11,9 @@ namespace LuxuryShop.Application.Catalog.Products
     {
         List<ProductViewModel> GetProductByLanguage(int pageIndex, int pageSize, out long total, string languageId);
         List<ProductViewModel> GetProductWithCate(int pageIndex, int pageSize, out long total,int CatID, string languageId);
-
-
         List<GetProductViewModel> GetProductBestSeller(GetProduct request);
-
         List<GetProductViewModel> GetProductBestBuy(GetProduct request);
         List<GetProductViewModel> GetProductNew(GetProduct request);
-
         ProductViewModel GetById(int productId, string languageId);
     }
 }

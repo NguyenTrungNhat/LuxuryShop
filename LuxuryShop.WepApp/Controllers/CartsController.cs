@@ -50,5 +50,39 @@ namespace LuxuryShop.WepApp.Controllers
             return Ok(listOrder);
         }
 
+        [Route("{UserName}/GetEmailUser")]
+        [HttpGet]
+        public IActionResult GetListCartAll(string UserName)
+        {
+            var EmailUser = _publicCartService.GetEmailUser(UserName);
+            if (EmailUser == null)
+            {
+                return BadRequest("Cannot find User");
+            }
+            return Ok(EmailUser);
+        }
+
+        [Route("{Email}/GetListCartAll")]
+        [HttpGet]
+        public IActionResult GetListOrderUser(string Email)
+        {
+            var listOrderUser = _publicCartService.GetListOrderUser(Email);
+            if (listOrderUser == null)
+            {
+                return BadRequest("Cannot find user");
+            }
+            return Ok(listOrderUser);
+        }
+
+        [HttpGet("{email}/GetListOrderByEmail")]
+        public IActionResult GetListOrderByEmail(string email)
+        {
+            var listOrder = _publicCartService.GetListCartByEmail(email);
+            if (listOrder == null)
+            {
+                return BadRequest("Cannot find Customer");
+            }
+            return Ok(listOrder);
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using LuxuryShop.Application.Common;
 using LuxuryShop.Data.Helper;
 using LuxuryShop.Data.Helper.Interfaces;
+using LuxuryShop.Data.Models;
 using LuxuryShop.Utilities.Exceptions;
 using LuxuryShop.ViewModels.Catalog.Cart;
+using LuxuryShop.ViewModels.Catalog.Products;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -70,6 +72,57 @@ namespace LuxuryShop.Application.Catalog.Cart
                 if (!string.IsNullOrEmpty(msgError))
                     throw new Exception(msgError);
                 return dt.ConvertTo<ListCustomerOrderViewModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public string GetEmailUser(string UserName)
+        {
+            string msgError = "";
+            try
+            {
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgError, "sp_Cart_getEmail_User",
+               "@UserName", UserName);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return (string)result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<ListOrderViewModel> GetListOrderUser(string Email)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_Cart_getOrder_Use",
+                    "@Email",Email);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<ListOrderViewModel>().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<ListOrderViewModel> GetListCartByEmail(string email)
+        {
+            string msgError = "";
+            try
+            {
+                var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_Carts_get_by_email",
+                     "@Email", email);
+                if (!string.IsNullOrEmpty(msgError))
+                    throw new Exception(msgError);
+                return dt.ConvertTo<ListOrderViewModel>().ToList();
             }
             catch (Exception ex)
             {

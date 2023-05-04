@@ -12,8 +12,10 @@ namespace LuxuryShop.Application.Catalog.Cart
     {
         int CreateOrder(CreateDonHangViewModel request);
         List<ListCustomerOrderViewModel> GetListCartAll();
-
         int UpdateStatusUser(int OrderID);
+        string GetEmailUser(string UserName);
+        List<ListOrderViewModel> GetListOrderUser(string Email);
+        List<ListOrderViewModel> GetListCartByEmail(string email);
 
     }
 }
