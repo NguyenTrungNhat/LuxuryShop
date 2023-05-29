@@ -25,6 +25,54 @@ namespace LuxuryShop.Application.Catalog.Cart
         }
         public int CreateOrder(CreateDonHangViewModel request)
         {
+            var checkQuantity = true;
+            for(int i=0; i < request.OrderDetails.Count; i++)
+            {
+                string msgErrorQuantity = "";
+                try
+                {
+                    var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgErrorQuantity, "sp_product_get_by_id",
+                         "@productId", request.OrderDetails[i].ProductId,
+                         "@languageId", "vi-VN");
+                    if (!string.IsNullOrEmpty(msgErrorQuantity))
+                        throw new Exception(msgErrorQuantity);
+                    var quantity = dt.ConvertTo<ProductViewModel>().FirstOrDefault();
+                    if(quantity.UnitsInStock < request.OrderDetails[i].quantity)
+                    {
+                        checkQuantity = false;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
+            if(!checkQuantity)
+            {
+                return 0;
+            }
+
+            for (int i = 0; i < request.OrderDetails.Count; i++)
+            {
+                string msgErrorUpdate = "";
+                try
+                {
+                    var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgErrorUpdate, "sp_product_update_stock",
+                    "@ProductId", request.OrderDetails[i].ProductId,
+                    "@addQuantity", request.OrderDetails[i].quantity);
+                    if ((result != null && !string.IsNullOrEmpty(result.ToString())) || !string.IsNullOrEmpty(msgErrorUpdate))
+                    {
+                        throw new Exception(Convert.ToString(result) + msgErrorUpdate);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
             string msgError = "";
             try
             {
