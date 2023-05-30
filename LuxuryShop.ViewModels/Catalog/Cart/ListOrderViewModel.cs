@@ -20,5 +20,6 @@ namespace LuxuryShop.ViewModels.Catalog.Cart
         public decimal? Price { get; set; }
         public decimal? TotalMoney { get; set; }
         public int? OrderID { get; set; }
+        public int? ProductID { get; set; }
     }
 }

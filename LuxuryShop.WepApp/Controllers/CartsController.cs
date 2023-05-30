@@ -1,6 +1,8 @@
 ﻿using LuxuryShop.Application.Catalog.Cart;
 using LuxuryShop.Application.Catalog.Products;
 using LuxuryShop.ViewModels.Catalog.Cart;
+using LuxuryShop.ViewModels.Catalog.Categories;
+using LuxuryShop.ViewModels.Catalog.ExportBill;
 using LuxuryShop.ViewModels.Catalog.Products;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +25,16 @@ namespace LuxuryShop.WepApp.Controllers
         public IActionResult Create([FromBody] CreateDonHangViewModel request)
         {
             var result = _publicCartService.CreateOrder(request);
+            if (result == 0)
+                return BadRequest();
+            return Ok(request);
+        }
+
+        [Route("CreateExportBill")]
+        [HttpPost()]
+        public IActionResult CreateExportBill([FromBody] CreateExportBillViewModels request)
+        {
+            var result = _publicCartService.CreateExportBill(request);
             if (result == 0)
                 return BadRequest();
             return Ok(request);
@@ -74,10 +86,10 @@ namespace LuxuryShop.WepApp.Controllers
             return Ok(listOrderUser);
         }
 
-        [HttpGet("{email}/GetListOrderByEmail")]
-        public IActionResult GetListOrderByEmail(string email)
+        [HttpGet("{email}/{orderID}/GetListOrderByEmail")]
+        public IActionResult GetListOrderByEmail(string email, int orderID)
         {
-            var listOrder = _publicCartService.GetListCartByEmail(email);
+            var listOrder = _publicCartService.GetListCartByEmail(email, orderID);
             if (listOrder == null)
             {
                 return BadRequest("Cannot find Customer");

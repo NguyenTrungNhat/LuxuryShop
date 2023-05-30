@@ -4,7 +4,9 @@ using LuxuryShop.Data.Helper.Interfaces;
 using LuxuryShop.Data.Models;
 using LuxuryShop.Utilities.Exceptions;
 using LuxuryShop.ViewModels.Catalog.Cart;
+using LuxuryShop.ViewModels.Catalog.ExportBill;
 using LuxuryShop.ViewModels.Catalog.Products;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -92,6 +94,42 @@ namespace LuxuryShop.Application.Catalog.Cart
             }
         }
 
+        public int CreateExportBill(CreateExportBillViewModels request)
+        {
+            string EmailCus = "";
+            string msgErrorEmail = "";
+            try
+            {
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgErrorEmail, "sp_Cart_getEmail_User",
+               "@UserName", request.CustomerId);
+                if (!string.IsNullOrEmpty(msgErrorEmail))
+                    throw new Exception(msgErrorEmail);
+                EmailCus = result.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            string msgError = "";
+            try
+            {
+                var result = _dbHelper.ExecuteScalarSProcedureWithTransaction(out msgError, "sp_exportBill_create",
+                "@khach", EmailCus,
+                "@listchitiet", JsonSerializer.Serialize(request.ExportBillDetails));
+                if ((result != null && !string.IsNullOrEmpty(result.ToString())) || !string.IsNullOrEmpty(msgError))
+                {
+                    throw new LuxuryShopException(Convert.ToString(result) + msgError);
+                }
+                return 1;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public int UpdateStatusUser(int OrderID)
         {
             string msgError = "";
@@ -161,13 +199,14 @@ namespace LuxuryShop.Application.Catalog.Cart
             }
         }
 
-        public List<ListOrderViewModel> GetListCartByEmail(string email)
+        public List<ListOrderViewModel> GetListCartByEmail(string email, int orderID)
         {
             string msgError = "";
             try
             {
                 var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_Carts_get_by_email",
-                     "@Email", email);
+                     "@Email", email,
+                     "@OrderID", orderID);
                 if (!string.IsNullOrEmpty(msgError))
                     throw new Exception(msgError);
                 return dt.ConvertTo<ListOrderViewModel>().ToList();

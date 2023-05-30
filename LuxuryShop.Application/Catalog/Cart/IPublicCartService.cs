@@ -1,4 +1,5 @@
 ﻿using LuxuryShop.ViewModels.Catalog.Cart;
+using LuxuryShop.ViewModels.Catalog.ExportBill;
 using LuxuryShop.ViewModels.Catalog.Products;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,12 @@ namespace LuxuryShop.Application.Catalog.Cart
     public interface IPublicCartService
     {
         int CreateOrder(CreateDonHangViewModel request);
+        int CreateExportBill (CreateExportBillViewModels request);
         List<ListCustomerOrderViewModel> GetListCartAll();
         int UpdateStatusUser(int OrderID);
         string GetEmailUser(string UserName);
         List<ListOrderViewModel> GetListOrderUser(string Email);
-        List<ListOrderViewModel> GetListCartByEmail(string email);
+        List<ListOrderViewModel> GetListCartByEmail(string email, int orderID);
 
     }
 }
