@@ -1,0 +1,103 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:4282"
+  },
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api-nguoidung/gio-hang/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "DownstreamPathTemplate": "/api/carts/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 22936
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api-nguoidung/loai-sp/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "DownstreamPathTemplate": "/api/categories/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 22936
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api-nguoidung/san-pham/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "DownstreamPathTemplate": "/api/product/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 22936
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api-nguoidung/user/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "DownstreamPathTemplate": "/api/users/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 22936
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api-admin/gio-hang/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "DownstreamPathTemplate": "/api/carts/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 28769
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api-admin/san-pham/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/product/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 28769
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api-admin/cap-quyen/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "DownstreamPathTemplate": "/api/roles/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 28769
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api-admin/user/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "DownstreamPathTemplate": "/api/users/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 28769
+        }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,7 @@ namespace LuxuryShop.Application.Catalog.Cart
 {
     public interface IManageCartService
     {
-        List<ListOrderViewModel> GetListCartByEmail(string email);
+        List<ListOrderViewModel> GetListCartByEmail(string email, int orderID);
         List<ListCustomerOrderViewModel> GetListCartAll();
         int UpdateStatus(int OrderID);
     }

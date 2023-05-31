@@ -16,10 +16,10 @@ namespace LuxuryShop.Admin.Controllers
             _manageCartService = manageCartService;
         }
 
-        [HttpGet("{email}/GetListOrderByEmail")]
-        public IActionResult GetListOrderByEmail(string email)
+        [HttpGet("{email}/{orderID}/GetListOrderByEmail")]
+        public IActionResult GetListOrderByEmail(string email, int orderID)
         {
-            var listOrder = _manageCartService.GetListCartByEmail(email);
+            var listOrder = _manageCartService.GetListCartByEmail(email,orderID);
             if (listOrder == null)
             {
                 return BadRequest("Cannot find Customer");

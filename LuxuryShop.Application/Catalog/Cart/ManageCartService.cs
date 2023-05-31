@@ -20,13 +20,14 @@ namespace LuxuryShop.Application.Catalog.Cart
             _dbHelper = dbHelper;
         }
 
-        public List<ListOrderViewModel> GetListCartByEmail(string email)
+        public List<ListOrderViewModel> GetListCartByEmail(string email, int orderID)
         {
             string msgError = "";
             try
             {
                 var dt = _dbHelper.ExecuteSProcedureReturnDataTable(out msgError, "sp_Carts_get_by_email",
-                     "@Email", email);
+                     "@Email", email,
+                     "@OrderID", orderID);
                 if (!string.IsNullOrEmpty(msgError))
                     throw new Exception(msgError);
                 return dt.ConvertTo<ListOrderViewModel>().ToList();
