@@ -120,7 +120,7 @@ namespace LuxuryShop.Admin.Controllers
             var filePath = _manageProductService.SaveFile(file, "Products");
             return filePath;
         }
-        [HttpPost("{productId}/images")]
+        [HttpPost("images/{productId}")]
         public IActionResult CreateImage(int productId, [FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid)
@@ -135,7 +135,7 @@ namespace LuxuryShop.Admin.Controllers
             return Created(nameof(GetImageById), image);
         }
 
-        [HttpPut("/images/{imageId}")]
+        [HttpPut("images/{imageId}")]
         public IActionResult UpdateImage(int imageId, [FromForm] ProductImageUpdateReques request)
         {
             if (!ModelState.IsValid)
@@ -150,7 +150,7 @@ namespace LuxuryShop.Admin.Controllers
 
         }
 
-        [HttpDelete("/images/{imageId}")]
+        [HttpDelete("images/{imageId}")]
         public IActionResult RemoveImage(int imageId)
         {
             if (!ModelState.IsValid)
@@ -165,13 +165,13 @@ namespace LuxuryShop.Admin.Controllers
 
         }
 
-        [HttpGet("/image/{imageId}")]
+        [HttpGet("image/{imageId}")]
         public ProductImageViewModel GetImageById(int imageId)
         {
             return _manageProductService.GetImageById(imageId);
         }
 
-        [HttpGet("{productId}/image/GetListImage")]
+        [HttpGet("image/GetListImage/{productId}")]
         public IActionResult GetListImage(int productId)
         {
             var image =  _manageProductService.GetListImages(productId);
